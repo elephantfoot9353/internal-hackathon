@@ -18,7 +18,7 @@ class GeminiClient:
         """
         Gemini API 클라이언트 초기화
         """
-        api_key = os.getenv("GEMINI_API_KEY")
+        api_key = os.getenv("GPT_API_KEY")
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel("gemini-2.5-flash")
 

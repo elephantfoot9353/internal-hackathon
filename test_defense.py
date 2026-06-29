@@ -4,7 +4,7 @@ from ai.gemini_client import GeminiClient
 
 load_dotenv()
 
-api_key = os.getenv("GEMINI_API_KEY")
+api_key = os.getenv("GPT_API_KEY")
 client = GeminiClient(api_key)
 
 print("=" * 60)

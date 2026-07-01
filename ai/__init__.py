@@ -1,4 +1,4 @@
-from ai.gemini_client import GeminiClient
+from ai.gpt_client import GPTClient
 from ai.prompt import generate_excuse_prompt
 
-__all__ = ["GeminiClient", "generate_excuse_prompt"]
+__all__ = ["GPTClient", "generate_excuse_prompt"]

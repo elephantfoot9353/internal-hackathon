@@ -1,7 +1,7 @@
 import os
 import json
 from dotenv import load_dotenv
-import google.generativeai as genai
+from openai import OpenAI
 from typing import Dict, Any
 from ai.prompt import (
     generate_excuse_prompt,
@@ -13,14 +13,14 @@ from ai.prompt import (
 load_dotenv()
 
 
-class GeminiClient:
+class GPTClient:
     def __init__(self):
         """
-        Gemini API 클라이언트 초기화
+        OpenAI GPT 클라이언트 초기화
         """
         api_key = os.getenv("GPT_API_KEY")
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel("gemini-2.5-flash")
+        self.client = OpenAI(api_key=api_key)
+        self.model = "gpt-4o-mini"
 
     def generate_excuses(
         self, situation: str, politeness: int, credibility: int
@@ -28,8 +28,14 @@ class GeminiClient:
         """변명 4개 생성"""
         prompt = generate_excuse_prompt(situation, politeness, credibility)
 
-        response = self.model.generate_content(prompt)
-        response_text = response.text
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": "당신은 창의적인 변명 생성 AI입니다. JSON 형식으로만 응답하세요."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        response_text = response.choices[0].message.content
 
         try:
             if response_text.startswith("```json"):
@@ -52,8 +58,14 @@ class GeminiClient:
             original_excuse, opponent_reaction, user_defense, attempt_num
         )
 
-        response = self.model.generate_content(prompt)
-        response_text = response.text
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": "당신은 현실적인 상대방 역할을 합니다. JSON 형식으로만 응답하세요."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        response_text = response.choices[0].message.content
 
         try:
             if response_text.startswith("```json"):
@@ -74,8 +86,14 @@ class GeminiClient:
         """의심도 측정"""
         prompt = measure_suspicion_prompt(original_excuse, conversation_history)
 
-        response = self.model.generate_content(prompt)
-        response_text = response.text
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": "당신은 심리 분석가입니다. JSON 형식으로만 응답하세요."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        response_text = response.choices[0].message.content
 
         try:
             if response_text.startswith("```json"):
@@ -98,8 +116,14 @@ class GeminiClient:
         """변명별 유의사항 생성"""
         prompt = generate_caution_prompt(excuses)
 
-        response = self.model.generate_content(prompt)
-        response_text = response.text
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": "당신은 실생활 조언 전문가입니다. JSON 형식으로만 응답하세요."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        response_text = response.choices[0].message.content
 
         try:
             if response_text.startswith("```json"):

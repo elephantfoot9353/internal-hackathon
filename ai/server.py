@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any
-from ai.gemini_client import GeminiClient
+from ai.gpt_client import GPTClient
 from ai.storage import storage
 
 load_dotenv()
@@ -19,7 +19,7 @@ try:
 except ImportError:
     print("[WARN] pyngrok not installed. Run: pip install pyngrok")
 
-app = FastAPI(title="AI Server - 변명 생성 (Gemini)")
+app = FastAPI(title="AI Server - 변명 생성 (GPT)")
 
 # CORS 설정 - 모든 오리진 허용
 app.add_middleware(
@@ -32,7 +32,7 @@ app.add_middleware(
 
 # 모델 로드
 print("[INFO] AI Server initializing...")
-ai_client = GeminiClient()
+ai_client = GPTClient()
 
 
 # ===== Pydantic Models =====

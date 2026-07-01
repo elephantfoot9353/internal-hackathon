@@ -3,7 +3,7 @@ import json
 
 # ngrok URL 또는 로컬 서버
 BASE_URL = "https://knee-tribunal-angular.ngrok-free.dev"
-# BASE_URL = "http://localhost:8001"  # 로컬 테스트
+#BASE_URL = "http://localhost:8001"  # 로컬 테스트
 
 print(f"🚀 AI 서버 연결 중: {BASE_URL}\n")
 client = httpx.Client(base_url=BASE_URL, timeout=30.0)
@@ -43,6 +43,8 @@ response = client.post("/generate-excuses", json={
     "politeness": politeness,
     "credibility": credibility,
 })
+print(f"Status: {response.status_code}")
+print(f"Response: {response.text}\n")
 result = response.json()
 
 print("생성된 변명:")

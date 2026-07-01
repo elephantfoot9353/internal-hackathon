@@ -217,4 +217,4 @@ async def get_defense_responses(session_id: str):
 @app.get("/health")
 async def health_check():
     """헬스 체크"""
-    return {"status": "ok", "server": "AI Server"}
+    return {"status": "ok", "server": "AI Server - 변명 생성 (GPT)"}
